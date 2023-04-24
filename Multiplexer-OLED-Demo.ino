@@ -19,28 +19,22 @@
 #define SCREEN_3 4
 #define SCREEN_4 5
 
+#define MAX_DEMOS 3
+
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 /**
 * Array of all available screens
 */
-int screens[] = {SCREEN_1, SCREEN_2, SCREEN_3, SCREEN_4};
+int screens[] = { SCREEN_1, SCREEN_2, SCREEN_3, SCREEN_4 };
 
-/**
-  Data representation of a planet for the solar system demo
-*/
-struct Planet {
-  int center_x;  // x positon of the planet
-  int center_y;  // y positon of the planet
-  int radius;    // radius (half of diameter) of the planet
-  float angle;   // current angle of the planet
-};
+int currentDemo = 0;  //the currently displayed demo
 
 /**
  Switches multiplexer bus to a different bus.
  @param bus multiplexer id
 */
-void switchToDisplay(uint8_t bus){
+void switchToDisplay(uint8_t bus) {
   Wire.beginTransmission(0x70);  // TCA9548A address
   Wire.write(1 << bus);          // send byte to select bus
   Wire.endTransmission();
@@ -54,14 +48,15 @@ void switchToDisplay(uint8_t bus){
 void initDisplay(int screen) {
   // Init OLED display on bus number 2
   switchToDisplay(screen);
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     Serial.println(F("SSD1306 allocation failed"));
-    for(;;);
-  } 
+    for (;;)
+      ;
+  }
   // Clear the buffer
   display.clearDisplay();
 }
- 
+
 void setup() {
   Serial.begin(9600);
 
@@ -69,22 +64,26 @@ void setup() {
   Wire.begin();
 
   // initialize all displays
-  for(int screen : screens) {
-      initDisplay(screen);
+  for (int screen : screens) {
+    initDisplay(screen);
   }
-
 }
- 
+
 void loop() {
-  for(int screen : screens) {
-      randomSeed(millis());
-      Serial.println(screen);
-      switchToDisplay(screen);
-      display.clearDisplay();
-      int x = (int) random(0, SCREEN_WIDTH);
-      int y = (int) random(0, SCREEN_HEIGHT);
-      int r = (int) random(1, 5);
-      display.fillCircle(x, y, r, WHITE);
-      display.display();
+  drawRandomCirclesDemo();
+}
+
+void drawRandomCirclesDemo() {
+  for (int screen : screens) {
+    randomSeed(millis());
+    Serial.println(screen);
+    switchToDisplay(screen);
+    display.clearDisplay();
+    int x = (int)random(0, SCREEN_WIDTH);
+    int y = (int)random(0, SCREEN_HEIGHT);
+    int r = (int)random(1, 10);
+    display.fillCircle(x, y, r, WHITE);
+    display.display();
+    delay(500);
   }
 }
