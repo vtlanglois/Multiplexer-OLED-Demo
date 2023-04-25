@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <Fonts/FreeSerif9pt7b.h>
 
 /**
 * OLED Screen Specs
@@ -21,7 +22,7 @@
 
 #define MAX_DEMOS 3
 
-const int interruptPin = 2; // digital input pin for recieiving button presses
+const int interruptPin = 2;  // digital input pin for recieiving button presses
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
@@ -75,7 +76,7 @@ void setup() {
 }
 
 void loop() {
-  drawPyramidDemo();
+  drawTextDemo();
 }
 
 void drawRandomCirclesDemo() {
@@ -99,18 +100,18 @@ void drawPyramidDemo() {
   display.clearDisplay();
   display.fillCircle(20, 20, 20, WHITE);
   display.fillCircle(18, 18, 20, BLACK);
-  display.fillTriangle(SCREEN_WIDTH/2, SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT/2, SCREEN_WIDTH/2 * 2, SCREEN_HEIGHT * 2, WHITE);
+  display.fillTriangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT / 2, SCREEN_WIDTH / 2 * 2, SCREEN_HEIGHT * 2, WHITE);
   display.display();
   //Screen 2 - top left
   switchToDisplay(SCREEN_2);
   display.clearDisplay();
-  display.fillTriangle(-SCREEN_WIDTH/2, SCREEN_HEIGHT, 0, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT, WHITE);
+  display.fillTriangle(-SCREEN_WIDTH / 2, SCREEN_HEIGHT, 0, SCREEN_HEIGHT / 2, SCREEN_WIDTH / 2, SCREEN_HEIGHT, WHITE);
   display.display();
 
   //Screen 3 - bottom right
   switchToDisplay(SCREEN_3);
   display.clearDisplay();
-  display.fillTriangle(0, SCREEN_HEIGHT, SCREEN_WIDTH, -SCREEN_HEIGHT, SCREEN_WIDTH/2 * 2, SCREEN_HEIGHT * 2, WHITE);
+  display.fillTriangle(0, SCREEN_HEIGHT, SCREEN_WIDTH, -SCREEN_HEIGHT, SCREEN_WIDTH / 2 * 2, SCREEN_HEIGHT * 2, WHITE);
   display.display();
 
   //Screen 4 - bottom left
@@ -119,17 +120,63 @@ void drawPyramidDemo() {
   /**
     @TODO: refactor this to use the fillTriangle function call. 
   */
-  display.fillRect(0, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT, WHITE);
-  int x = SCREEN_WIDTH/2;
+  display.fillRect(0, 0, SCREEN_WIDTH / 2, SCREEN_HEIGHT, WHITE);
+  int x = SCREEN_WIDTH / 2;
   int y = SCREEN_HEIGHT - 1;
   for (int i = 0; i < SCREEN_HEIGHT; i++) {
-    display.drawFastHLine(x, y, SCREEN_WIDTH/2-i, WHITE);
+    display.drawFastHLine(x, y, SCREEN_WIDTH / 2 - i, WHITE);
     y--;
   }
   display.display();
+}
 
+void drawTextDemo() {
+  //Screen 1 - Haiku
+  switchToDisplay(SCREEN_1);
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 0);
+  display.println("In the Cicada's cry");
+  display.println("No sign can foretell");
+  display.println("How soon it must die.");
+  display.println(" - Matsuo Basho");
+  display.display();
 
+  //Screen 2 - Joke
+  switchToDisplay(SCREEN_2);
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 0);
+  display.println("The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. ");
+  display.display();
 
+  //Screen 2 - Elden Ring Stats
+  switchToDisplay(SCREEN_3);
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 0);
+  display.println("Vigor: 26");
+  display.println("Mind: 15");
+  display.println("Endurance: 20");
+  display.println("Strength: 16");
+  display.println("Dexerity: 24");
+  display.println("Intelligence: 9");
+  display.println("Faith: 12");
+  display.println("Arcane: 14");
+  display.display();
+
+    //Screen 2 - Demo Stats
+  switchToDisplay(SCREEN_4);
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 0);
+  display.println("Time since start: ");
+  display.println(millis());
+  display.display();
 }
 
 void goToNextDemo() {
