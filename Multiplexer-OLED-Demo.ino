@@ -21,6 +21,8 @@
 
 #define MAX_DEMOS 3
 
+const int interruptPin = 2; // digital input pin for recieiving button presses
+
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 /**
@@ -67,10 +69,13 @@ void setup() {
   for (int screen : screens) {
     initDisplay(screen);
   }
+  // set up interrupt
+  pinMode(interruptPin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(interruptPin), goToNextDemo, RISING);
 }
 
 void loop() {
-  drawRandomCirclesDemo();
+  drawPyramidDemo();
 }
 
 void drawRandomCirclesDemo() {
@@ -86,4 +91,48 @@ void drawRandomCirclesDemo() {
     display.display();
     delay(500);
   }
+}
+
+void drawPyramidDemo() {
+  //Screen 1 - Moon + top right;
+  switchToDisplay(SCREEN_1);
+  display.clearDisplay();
+  display.fillCircle(20, 20, 20, WHITE);
+  display.fillCircle(18, 18, 20, BLACK);
+  display.fillTriangle(SCREEN_WIDTH/2, SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT/2, SCREEN_WIDTH/2 * 2, SCREEN_HEIGHT * 2, WHITE);
+  display.display();
+  //Screen 2 - top left
+  switchToDisplay(SCREEN_2);
+  display.clearDisplay();
+  display.fillTriangle(-SCREEN_WIDTH/2, SCREEN_HEIGHT, 0, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT, WHITE);
+  display.display();
+
+  //Screen 3 - bottom right
+  switchToDisplay(SCREEN_3);
+  display.clearDisplay();
+  display.fillTriangle(0, SCREEN_HEIGHT, SCREEN_WIDTH, -SCREEN_HEIGHT, SCREEN_WIDTH/2 * 2, SCREEN_HEIGHT * 2, WHITE);
+  display.display();
+
+  //Screen 4 - bottom left
+  switchToDisplay(SCREEN_4);
+  display.clearDisplay();
+  /**
+    @TODO: refactor this to use the fillTriangle function call. 
+  */
+  display.fillRect(0, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT, WHITE);
+  int x = SCREEN_WIDTH/2;
+  int y = SCREEN_HEIGHT - 1;
+  for (int i = 0; i < SCREEN_HEIGHT; i++) {
+    display.drawFastHLine(x, y, SCREEN_WIDTH/2-i, WHITE);
+    y--;
+  }
+  display.display();
+
+
+
+}
+
+void goToNextDemo() {
+  // Circular loop for demo selection
+  currentDemo = (currentDemo + 1) % MAX_DEMOS;
 }
