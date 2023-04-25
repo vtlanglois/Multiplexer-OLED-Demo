@@ -76,7 +76,17 @@ void setup() {
 }
 
 void loop() {
-  drawTextDemo();
+  switch(currentDemo) {
+    case 0:
+      drawRandomCirclesDemo();
+      break;
+    case 1:
+      drawPyramidDemo();
+      break;
+    case 2:
+      drawTextDemo();
+      break;
+  }
 }
 
 void drawRandomCirclesDemo() {
@@ -90,7 +100,6 @@ void drawRandomCirclesDemo() {
     int r = (int)random(1, 10);
     display.fillCircle(x, y, r, WHITE);
     display.display();
-    delay(500);
   }
 }
 
@@ -174,7 +183,7 @@ void drawTextDemo() {
   display.setTextSize(2);
   display.setTextColor(WHITE);
   display.setCursor(0, 0);
-  display.println("Time since start: ");
+  display.println("Time (MS) since start: ");
   display.println(millis());
   display.display();
 }
