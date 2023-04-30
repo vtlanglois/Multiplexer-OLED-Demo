@@ -88,7 +88,9 @@ void loop() {
       break;
   }
 }
-
+/**
+ * Draws a randomly-sized circle at a random position on each screen
+*/
 void drawRandomCirclesDemo() {
   for (int screen : screens) {
     randomSeed(millis());
@@ -102,6 +104,10 @@ void drawRandomCirclesDemo() {
     display.display();
   }
 }
+
+/**
+ * Draws a complex pyramid using all four screens
+*/
 
 void drawPyramidDemo() {
   //Screen 1 - Moon + top right;
@@ -139,6 +145,9 @@ void drawPyramidDemo() {
   display.display();
 }
 
+/**
+ * Draws distinct textboxes on each screen.
+*/
 void drawTextDemo() {
   //Screen 1 - Haiku
   switchToDisplay(SCREEN_1);
@@ -155,7 +164,7 @@ void drawTextDemo() {
   //Screen 2 - Joke
   switchToDisplay(SCREEN_2);
   display.clearDisplay();
-  display.setTextSize(2);
+  display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0, 0);
   display.println("The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. ");
@@ -188,6 +197,10 @@ void drawTextDemo() {
   display.display();
 }
 
+
+/**
+  Upon pressing the interrupt button, go to the next demo 
+*/
 void goToNextDemo() {
   // Circular loop for demo selection
   currentDemo = (currentDemo + 1) % MAX_DEMOS;
